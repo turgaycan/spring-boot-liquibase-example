@@ -1,37 +1,65 @@
-## Welcome to GitHub Pages
+## Welcome to spring-boot-liquibase integration example
 
-You can use the [editor on GitHub](https://github.com/TurgayCan2/spring-boot-liquibase-example/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+Spring boot, liquibase integration and h2 db integration test for PostgreSQL 
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### Markdown
+### Technologies
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+spring boot 1.5.1.RELEASE
+spring-boot-starter-parent
+spring-boot-starter-data-jpa
+spring-boot-starter-test
+h2 db
+postgresql
+liquibase
 
-```markdown
-Syntax highlighted code block
+# application-test.properties
 
-# Header 1
-## Header 2
-### Header 3
+```
+spring.datasource.name=testData
+spring.jmx.default-domain=jpa.sample
 
-- Bulleted
-- List
+management.security.enabled=false
+spring.jpa.hibernate.ddl-auto=none
 
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+liquibase.change-log=classpath:/db/changelog/db.changelog-master.xml
+liquibase.enabled=true
+liquibase.url=jdbc:h2:mem:testData;mode:PostgreSQL
+liquibase.user=sa
+liquibase.password=
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+# liquibase changelog.xml
 
-### Jekyll Themes
+```
+<?xml version="1.0" encoding="UTF-8"?>
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/TurgayCan2/spring-boot-liquibase-example/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-### Support or Contact
+    <changeSet id="2017-02-15 12:00" author="turgay">
+        <createTable tableName="city">
+            <column name="id" type="long" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="map" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+</databaseChangeLog>
+
+```
